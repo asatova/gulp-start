@@ -1,8 +1,9 @@
-const {src, dest, watch, parallel } = require('gulp');
+const {src, dest, watch, parallel, series } = require('gulp');
 const scss = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat')
 const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
+const clean = require('gulp-clean');
 
 
 
@@ -43,7 +44,7 @@ function browsersync() {
         }
     });
 }
-function build() {
+function building() {
     return src([
         'app/css/style.min.css',
         'app/js/main.min.js',
@@ -51,10 +52,14 @@ function build() {
     ], {base :'app'})
         .pipe(dest('dist'))
 }
-
+function cleanDist() {
+    return src('dist')
+        .pipe(clean())
+}
 
 exports.styles = styles;
 exports.scripts = scripts;
 exports.watching = watching;
 exports.browsersync = browsersync;
+exports.build = series(cleanDist, building)
 exports.default = parallel(styles, scripts, browsersync, watching);
