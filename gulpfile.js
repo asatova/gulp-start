@@ -43,7 +43,14 @@ function browsersync() {
         }
     });
 }
-
+function build() {
+    return src([
+        'app/css/style.min.css',
+        'app/js/main.min.js',
+        'app/**/*.html'
+    ], {base :'app'})
+        .pipe(dest('dist'))
+}
 
 
 exports.styles = styles;
